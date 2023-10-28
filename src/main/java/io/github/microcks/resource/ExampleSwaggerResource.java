@@ -1,4 +1,4 @@
-package io.github.microcks;
+package io.github.microcks.resource;
 
 
 import org.slf4j.Logger;
@@ -12,22 +12,22 @@ import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.SpecVersion;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
-import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
-@Path("/swagger")
-public class SwaggerResource {
+@Path("/example/swagger")
+public class ExampleSwaggerResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExampleSwaggerResource.class);
 
     @GET
     @Path("json")
-    @Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
     public String json() {
         OpenAPI openAPI = createOpenApi();
         String json = Json.pretty(openAPI);
@@ -38,7 +38,7 @@ public class SwaggerResource {
 
     @GET
     @Path("yaml")
-    @Produces(jakarta.ws.rs.core.MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
     public String yaml() {
         OpenAPI openAPI = createOpenApi();
         String yaml = Yaml.pretty(openAPI);
@@ -48,15 +48,17 @@ public class SwaggerResource {
     }
 
     private OpenAPI createOpenApi() {
-        Paths paths = new io.swagger.v3.oas.models.Paths();
+        Paths paths = new Paths();
         String endpointUrl = "/api/resource";
         String httpMethod = "GET";
         PathItem pathItem = new PathItem();
         paths.addPathItem(endpointUrl, pathItem);
 
         if (httpMethod.equals("GET")) {
-            ApiResponse apiResponse = new ApiResponse().description("OK").content(new Content()
-                    .addMediaType("application/json", new MediaType().schema(new StringSchema())));
+            ApiResponse apiResponse = new ApiResponse().description("OK")
+                    .content(new Content().addMediaType("application/json",
+                            new io.swagger.v3.oas.models.media.MediaType()
+                                    .schema(new StringSchema())));
 
             pathItem.get(new Operation()
                     .responses(new ApiResponses().addApiResponse("200", apiResponse)));
