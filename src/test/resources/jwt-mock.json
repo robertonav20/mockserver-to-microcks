@@ -1,0 +1,20 @@
+{
+    "httpRequest": {
+        "path": "/test",
+        "method": "POST",
+        "headers": {
+            "Authorization": [
+                "Bearer JWT"
+            ]
+        }
+    },
+    "httpResponse": {
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": [
+                "text/plain"
+            ]
+        },
+        "body": "TEST"
+    }
+}
